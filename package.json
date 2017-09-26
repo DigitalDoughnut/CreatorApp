@@ -1,0 +1,25 @@
+{
+  "name": "creatorapp",
+  "version": "1.0.0",
+  "description": "Writers' collaboration tool",
+  "main": "index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DigitalDoughnut/CreatorApp.git"
+  },
+  "keywords": [
+    "writers",
+    "collaboration",
+    "world",
+    "building"
+  ],
+  "author": "David Salisbury",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DigitalDoughnut/CreatorApp/issues"
+  },
+  "homepage": "https://github.com/DigitalDoughnut/CreatorApp#readme"
+}
