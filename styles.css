@@ -1,24 +1,32 @@
 
 body{
-    background-color: #FAE9CD;
+    background-color: #d4d8d9;
 }
 .dashboard1{
     background-color: #CDFAD7;
     
 }
 .dashboard2{
-    background-color: #FAE9CD;
+    background-color: #d4d8d9;
     
 }
 .dashboard3{
     background-color: #CDFAD7;
 }
-.dashboard-header2{
-    background-color: #CDFAD7;
+.dashboard-header2,.dashboard-header2 a {
+    background-color: #394039;
+    color: #fff;
     
     }
-.brown-dms {
-    background-color: #472F08;
+    
+    .dashboard-header4 {
+    background-color: #f2f3f5;
+    color: #383838;
+    
+    }
+    
+.navbarColor1 {
+    background-color: #252525;
 }
 
 div.row>hr{
@@ -29,7 +37,27 @@ div.row>hr{
 
 
 
-
+.no_underline a {
+        
+        text-decoration: none;
+        color: white;
+    }
+.no_underline a:hover {
+        
+        text-decoration: none;
+        color: #ccc;
+    }
+    
+.no_underline2 a {
+        
+        text-decoration: none;
+        color: #383838;
+    }
+.no_underline2 a:hover {
+        
+        text-decoration: none;
+        color: #808080;
+    }
     
 /* 
 
