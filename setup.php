@@ -15,13 +15,22 @@
               pass VARCHAR(16),
               INDEX(user(6))');
   
-  createTable('environments',
-              'envname VARCHAR(32),
-              envtype VARCHAR(16),
+  createTable('Environment',
+              'Envname VARCHAR(32),
+              Envtype VARCHAR(16),
               userID VARCHAR(16),
-              envdesc TEXT,
-              INDEX(envname(6)),
-              INDEX(envtype(6)),
+              Envdesc TEXT,
+              INDEX(Envname(6)),
+              INDEX(Envtype(6)),
+              INDEX(userID(6))');
+  
+  createTable('Player',
+              'Playername VARCHAR(32),
+              Playertype VARCHAR(16),
+              userID VARCHAR(16),
+              Playerdesc TEXT,
+              INDEX(Playername(6)),
+              INDEX(Playertype(6)),
               INDEX(userID(6))');
 
   createTable('messages', 

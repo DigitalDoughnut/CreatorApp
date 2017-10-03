@@ -15,31 +15,7 @@
   }
   else $loggedin = FALSE;
   
-    if (isset($_POST['EnvType']) &&
-        isset($_POST['EnvName']) &&
-        isset($_POST['EnvDesc']))
-  {
-    $EnvType = sanitizeString($_POST['EnvType']);
-    $EnvName = sanitizeString($_POST['EnvName']);
-    $EnvDesc = sanitizeString($_POST['EnvDesc']);
-    
-    $_POST['EnvType'] = "";
-    $_POST['EnvName'] = "";
-    $_POST['EnvDesc'] = ""; 
-    /*echo "Environment type: '$EnvType'";
-    echo "Environment name: '$EnvName'";
-    echo "Environment description: '$EnvDesc'";*/
 
-    if ($EnvType != "Select environment" && $EnvName != "" && $EnvDesc != "")
-    {
-      $time = time();
-      queryMysql("INSERT INTO environments VALUES('$EnvName',
-        '$EnvType', '$user', '$EnvDesc')");
-      $EnvType = "";
-      $EnvName = "";
-      $EnvDesc = "";
-    }
-  }
 
 
 echo    "
@@ -130,123 +106,234 @@ echo    '<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.
 </nav>';
   }
   
-/* ---------------------  ENVIRONMENTS -------------------------- */
+/* ---------------------  SECTIONS -------------------------- */
 
-$query = "SELECT userID FROM environments WHERE userID='$user'";
+function createDashboardSection ($table_name , $sectionID, $optionArray, $subsectionsArray){
+global $user;
+
+    if (isset($_POST["$sectionID-Type"]) &&
+        isset($_POST["$sectionID-Name"]) &&
+        isset($_POST["$sectionID-Desc"]))
+  {
+    $Type = sanitizeString($_POST["$sectionID-Type"]);
+    $Name = sanitizeString($_POST["$sectionID-Name"]);
+    $Desc = sanitizeString($_POST["$sectionID-Desc"]);
+    
+    $_POST["$sectionID-Type"] = "";
+    $_POST["$sectionID-Name"] = "";
+    $_POST["$sectionID-Desc"] = ""; 
+
+    if ($Type != "Select $table_name" && $Name != "" && $Desc != "")
+    {
+      $time = time();
+      queryMysql("INSERT INTO $table_name VALUES('$Name',
+        '$Type', '$user', '$Desc')");
+      $Desc = $Name = $Type = "";
+    }
+  }
+
+$query = "SELECT userID FROM $table_name WHERE userID='$user'";
 $result = queryMysql($query);
 $rows = $result->num_rows;
 if (!$rows){
     $rows = 0;
 }
-  
-echo "  <div class='container'>
+
+echo "  <div class='container'>     
 
             <div class='row'>
                <div class='col-sm-6 dashboard2 py-3 pr-2'>
                  <div class=' p-2 dashboard-header2 rounded-top no_underline'>
                  <div class='dashboard-header2'>
-                    <a class='CollapseCaret' data-toggle='collapse' href='#Env' aria-expanded='false' aria-controls='Env'><h4>Environments ($rows) <i class='fa fa-caret-right'></i></h4></a>
+                    <a class='CollapseCaret' data-toggle='collapse' href='#$sectionID' aria-expanded='false' aria-controls='$sectionID'><h4>$table_name" . "s ($rows) <i class='fa fa-caret-right'></i></h4></a>
                  </div>
-                 </div>
+                 </div> 
                  <div class=' p-2 dashboard-header4 rounded-bottom no_underline2'>
-                 <div class='collapse' id='Env'>";
+                 <div class='collapse' id='$sectionID'>";
 
 
 
-/* ------  ADD ENVIRONMENT ------ */
+/* ------  ADD SECTION ------ */
 
-echo                 '<a class="CollapseCaret" data-toggle="collapse" href="#MacEnvForm" aria-expanded="false" aria-controls="MacEnvForm">Add Environment <i class="fa fa-caret-right"></i></a>
-                     <div class="collapse" id="MacEnvForm">
-                     <form method="post" action="MyEnvironments.php">
-                     <div class="form-group">
-                     <label for="EnvType">Environment Type: </label>
-                     <select type="text" class="form-control" id="EnvType" name="EnvType">
-                     <option>Select environment</option>
-                     <option>World</option>
-                     <option>Region</option>
-                     <option>City</option>
-                     <option>Building</option>
-                     <option>Other Macro</option>
-                     <option>Other Ext Micro</option>
-                     <option>Other Int Micro</option>
+echo                 "<a class='CollapseCaret' data-toggle='collapse' href='#$sectionID-Form' aria-expanded='false' aria-controls='$sectionID-Form'>Add $table_name <i class='fa fa-caret-right'></i></a>
+                     <div class='collapse' id='$sectionID-Form'>
+                     <form method='post' action='dashboard.php'>
+                     <div class='form-group'>
+                     <label for='$sectionID-Type'>$table_name Type: </label>
+                     <select type='text' class='form-control' id='$sectionID-Type' name='$sectionID-Type'>
+                     <option>Select $table_name</option>";
+
+$optionCount = count($optionArray);
+for ($j=0; $j<$optionCount ; ++$j){
+    echo "<option>$optionArray[$j]</option>";
+}
+
+echo                "
                      </select>
+                     </div> 
+                     <div class='form-group'>
+                     <label for='$sectionID-Name'>$table_name Name: </label>
+                     <input type='text' class='form-control' id='$sectionID-Name' name='$sectionID-Name'>
                      </div>
-                     <div class="form-group">
-                     <label for="EnvName">Environment Name: </label>
-                     <input type="text" class="form-control" id="EnvName" name="EnvName">
-                     </div>
-                     <div class="form-group">
-                     <label for="EnvDesc">Environment Description: </label>
-                     <textarea name="EnvDesc" placeholder="Type or paste environment description here" class="form-control" id="EnvDesc" rows="6" class="d-block"></textarea>
+                     <div class='form-group'>
+                     <label for='$sectionID-Desc'>$table_name Description: </label>
+                     <textarea name='$sectionID-Desc' placeholder='Type or paste $table_name description here' class='form-control' id='$sectionID-Desc' rows='6' class='d-block'></textarea>
                      </div>
                      <div>
-                     <button type="submit" class="my-2 btn btn-primary">Add Environment</button>
+                     <button type='submit' class='my-2 btn btn-primary'>Add $table_name</button>
                      </div>
                      </form>
                      </div>
-                     <hr>';
+                     <hr>";
 
-/* ------  MACRO ENVIRONMENTS ------ */
+/* ------  SUBSECTIONS HARMONISED ------ */
 
-echo                 '<h4>Macro Environments <span data-toggle="tooltip" data-placement="top" title="worlds, countries, cities etc"> &nbsp; <i class="fa fa-question-circle-o"></i> </span> </h4>';
 
-$query = "SELECT * FROM environments WHERE userID='$user' && envtype='City' || userID='$user' && envtype='World' || userID='$user' && envtype='Region' || userID='$user' && envtype='Other Macro'";
+
+
+
+$subSectionCount = count($subsectionsArray);
+
+
+
+for ($sub=0 ; $sub<$subSectionCount ; ++$sub){
+$subsectionName = $subsectionsArray[$sub][0];
+$subsectionNameIDArray = explode (" " , $subsectionName);
+$subsectionNameID = $subsectionNameIDArray[0];
+$subsectionCategoryCount = count ($subsectionsArray[$sub]);
+
+        
+echo  "<h4>$subsectionName" . "<span data-toggle='tooltip' data-placement='top' title='worlds, countries, cities etc'> &nbsp; <i class='fa fa-question-circle-o'></i> </span> </h4>";
+
+$querySection = "";
+
+for ($j=1 ; $j<$subsectionCategoryCount ; ++$j) {
+    
+$subsectionCategory = $subsectionsArray[$sub][$j];
+$querySection .= "userID='$user' && " . $sectionID . "type='$subsectionCategory'";
+
+if ($j<$subsectionCategoryCount-1) {
+    $querySection .= " || ";
+}
+}
+
+$query = "SELECT * FROM $table_name WHERE " . $querySection;
 $result = queryMysql($query);
 $rows = $result->num_rows;
 
 if ($rows) {
+    $nameExt = $sectionID . "name";
+    $typeExt = $sectionID . "type";
+    $descExt = $sectionID . "desc";
+    
 for ($j = 0; $j<$rows ; ++$j){
     $result->data_seek($j);
     $row = $result->fetch_array(MYSQLI_ASSOC);
-    $EnvName = $row['envname'];
-    $EnvType = $row['envtype'];
-    $EnvDesc = $row['envdesc'];
-    echo "<div><a class='CollapseCaret' data-toggle='collapse' href='#MacEnv$j' aria-expanded='false' aria-controls='MacEnv$j'>$EnvName ($EnvType) <i class='fa fa-caret-right'></i></a></div>";
-    echo "<div class='collapse' id='MacEnv$j'>";
-    echo "<div>$EnvDesc</div></div>";
+    $Name = $row["$nameExt"];
+    $Type = $row["$typeExt"];
+    $Desc = $row["$descExt"];
+    echo "<div><a class='CollapseCaret' data-toggle='collapse' href='#" . $subsectionNameID . "$sectionID" . "$j' aria-expanded='false' aria-controls='" . $subsectionNameID . "$sectionID" . "$j'>$Name ($Type) <i class='fa fa-caret-right'></i></a></div>";
+    echo "<div class='collapse' id='" . $subsectionNameID . "$sectionID" . "$j'>";
+    echo "<div>$Desc</div></div>";
+}
+}
+else {
+echo "<p>You do not currently have any Macro " . $table_name ."s</p>";
+
+
+
+}
+
+}
+ 
+
+/* ------  MACRO SECTION ------ */
+/*
+echo                 "<h4>Macro $table_name" . "s <span data-toggle='tooltip' data-placement='top' title='worlds, countries, cities etc'> &nbsp; <i class='fa fa-question-circle-o'></i> </span> </h4>";
+
+$query = "SELECT * FROM $table_name WHERE userID='$user' && " . $sectionID . "type='City' || userID='$user' && " . $sectionID . "type='World' || userID='$user' && " . $sectionID . "type='Region' || userID='$user' && " . $sectionID . "type='Other Macro'";
+$result = queryMysql($query);
+$rows = $result->num_rows;
+
+if ($rows) {
+    $nameExt = $sectionID . "name";
+    $typeExt = $sectionID . "type";
+    $descExt = $sectionID . "desc";
+for ($j = 0; $j<$rows ; ++$j){
+    $result->data_seek($j);
+    $row = $result->fetch_array(MYSQLI_ASSOC);
+    $Name = $row["$nameExt"];
+    $Type = $row["$typeExt"];
+    $Desc = $row["$descExt"];
+    echo "<div><a class='CollapseCaret' data-toggle='collapse' href='#Mac" . "$sectionID" . "$j' aria-expanded='false' aria-controls='Mac" . "$sectionID" . "$j'>$Name ($Type) <i class='fa fa-caret-right'></i></a></div>";
+    echo "<div class='collapse' id='Mac" . "$sectionID" . "$j'>";
+    echo "<div>$Desc</div></div>";
 }
 }
 else {
 
   
-echo '<p>You do not currently have any macro environments</p>';}
+echo "<p>You do not currently have any Macro " . $table_name ."s</p>";}
 
-/* ------  MICRO ENVIRONMENTS ------ */
+/* ------  MICRO SECTION ------ 
 
-echo '<hr><h4>Micro Environments <span data-toggle="tooltip" data-placement="top" title="buildings, arenas, rooms etc"> &nbsp; <i class="fa fa-question-circle-o"></i> </span></h4>';
-$query = "SELECT * FROM environments WHERE userID='$user' && envtype='Building' || userID='$user' && envtype='Other Ext Micro' || userID='$user' && envtype='Other Int Micro'";
+echo "<hr><h4>Micro " . $table_name . "s <span data-toggle='tooltip' data-placement='top' title='buildings, arenas, rooms etc'> &nbsp; <i class='fa fa-question-circle-o'></i> </span></h4>";
+$query = "SELECT * FROM $table_name WHERE userID='$user' && " . $sectionID . "type='Building' || userID='$user' && " . $sectionID . "type='Other Ext Micro' || userID='$user' && " . $sectionID . "type='Other Int Micro'";
 $result = queryMysql($query);
 $rows = $result->num_rows;
 
 if ($rows) {
+    $nameExt = $sectionID . "name";
+    $typeExt = $sectionID . "type";
+    $descExt = $sectionID . "desc";    
 for ($j = 0; $j<$rows ; ++$j){
     $result->data_seek($j);
     $row = $result->fetch_array(MYSQLI_ASSOC);
-    $EnvName = $row['envname'];
-    $EnvType = $row['envtype'];
-    $EnvDesc = $row['envdesc'];
-    echo "<div><a class='CollapseCaret' data-toggle='collapse' href='#MicEnv$j' aria-expanded='false' aria-controls='MicEnv$j'>$EnvName ($EnvType) <i class='fa fa-caret-right'></i></a></div>";
-    echo "<div class='collapse' id='MicEnv$j'>";
-    echo "<div>$EnvDesc</div></div>";
+    $Name = $row["$nameExt"];
+    $Type = $row["$typeExt"];
+    $Desc = $row["$descExt"];
+    echo "<div><a class='CollapseCaret' data-toggle='collapse' href='#Mic" . $sectionID . $j . "' aria-expanded='false' aria-controls='Mic" . $sectionID. $j . "'>$Name ($Type) <i class='fa fa-caret-right'></i></a></div>";
+    echo "<div class='collapse' id='Mic" . $sectionID . $j ."'>";
+    echo "<div>$Desc</div></div>";
 }
 }
 else {
 
   
-echo '<p>You do not currently have any micro environments</p>';}
+echo "<p>You do not currently have any Micro $table_name" . "s</p>";
 
-    echo'      
-               </div>
-               </div>
-               </div>
-                <div class="col-sm-6 dashboard2 py-3 pr-2">
-                 <div class="dashboard-header2 p-2 rounded">
+}
+
+ */
+}
+
+
+$envSubsections = array (
+    array('Macro Environments' , 'World' , 'Region' , 'City' , 'Other Macro'),
+    array('Micro Environments' , 'Building' , 'Other Ext Micro' , 'Other Int Micro')
+    );
+
+
+
+createDashboardSection ('Environment' , 'Env', ['World' , 'Region'
+    , 'City' , 'Building' , 'Other Macro' , 'Other Ext Micro' , 'Other Int Micro']
+    , [['Macro Environments' , 'World' , 'Region' , 'City' , 'Other Macro'] ,
+    ['Micro Environments' , 'Building' , 'Other Ext Micro' , 'Other Int Micro']]);
+
+echo "</div></div></div>";
+
+createDashboardSection ('Player' , 'Player', ['Protagonist' , 'Anti-Hero'] , $envSubsections );
+
+echo "</div></div></div>";
+
+    echo   "  <div class='col-sm-6 dashboard2 py-3 pr-2'>
+                 <div class='dashboard-header2 p-2 rounded'>
                 <h4>Other categories </h4>
                 <p>You do not currently have any other categories</p>
                  </div>
                </div>
             </div>
-        </div>';
+        </div>";
 
 echo "<script>$('.CollapseCaret').on('click', function() {
     $(this).find('i').toggleClass('fa fa-caret-right');

@@ -2,17 +2,20 @@
 body{
     background-color: #d4d8d9;
 }
+/*
 .dashboard1{
     background-color: #CDFAD7;
-    
 }
+*/
+
 .dashboard2{
     background-color: #d4d8d9;
     
 }
-.dashboard3{
+/*.dashboard3{
     background-color: #CDFAD7;
-}
+} */
+
 .dashboard-header2,.dashboard-header2 a {
     background-color: #394039;
     color: #fff;
