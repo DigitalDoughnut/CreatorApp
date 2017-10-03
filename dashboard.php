@@ -1,4 +1,5 @@
-<?php
+<!-- Dashboard page will likely become home page -->
+<?php 
   session_start();
 
   echo "<!DOCTYPE html>\n<html><head>";
